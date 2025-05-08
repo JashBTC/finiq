@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account - FLA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fdf8e3;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #183152;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #f4a261;
+        }
+
+        .account-section {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .account-section h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #183152;
+        }
+
+        .account-section p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .logout-btn {
+            background-color: #f4a261;
+            color: #0f4c4c;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #e38e45;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="links">
+            <a href="Home.html">Home</a>
+            <a href="Learninghub.html">Learning Hub</a>
+            <a href="Simulator.html">Simulator</a>
+            <a href="Quizzes.html">Quizzes</a>
+            <a href="Budget.html">Budget</a>
+        </div>
+        <a href="Account.html" title="My Account">
+            <i class="fas fa-user-circle account-icon"></i>
+        </a>
+    </div>
+
+    <!-- Account Info Section -->
+    <div class="account-section">
+        <h1>My Account</h1>
+        <p id="welcomeText">Welcome, User!</p>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Script to fetch name and handle logout -->
+    <script>
+        const welcomeText = document.getElementById("welcomeText");
+        const userData = JSON.parse(localStorage.getItem("user"));
+
+        if (userData && userData.firstName) {
+            welcomeText.textContent = `Welcome, ${userData.firstName} ${userData.lastName || ''}!`;
+        } else {
+            welcomeText.textContent = "Welcome, User!";
+        }
+
+        function logout() {
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("user");
+            window.location.href = "LogIn.html"; // Change if your signup file has a different name
+        }
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Sign Up & Sign In</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fdf8e3;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background-color: #183152;
+      padding: 15px 30px;
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: #f4a261;
+    }
+  </style>
+</head>
+<body class="bg-[#FAF0D7] min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="navbar w-full">
+    <a href="#">Home</a>
+    <a href="#">Learning Hub</a>
+    <a href="#">Simulator</a>
+    <a href="#">Quizzes</a>
+    <a href="#">Budget</a>
+  </nav>
+
+  <main class="flex flex-col max-w-6xl w-full mx-auto mt-8 items-center justify-center px-6 space-y-16">
+
+    <!-- Logo -->
+    <section class="flex-shrink-0 flex items-center justify-center">
+      <img alt="FinIQ logo" class="max-w-full h-auto" height="250" src="Images/Logo.png" width="500" />
+    </section>
+
+    <!-- Sign Up Form -->
+    <section class="w-full max-w-lg">
+      <button aria-label="Sign up with Google" class="flex items-center border border-gray-400 rounded-md px-4 py-2 mb-8 w-full" id="googleSignUpBtn" type="button">
+        <img alt="Google logo" class="mr-3" height="20" src="Images/GoogleLogo.png" width="20" />
+        <span class="text-base text-black">Sign up with Google</span>
+      </button>
+      <div class="flex items-center mb-6">
+        <hr class="border-t border-black flex-grow" />
+        <span class="mx-4 text-black text-base">or</span>
+        <hr class="border-t border-black flex-grow" />
+      </div>
+
+      <form class="space-y-6" id="signupForm">
+        <div class="flex space-x-4">
+          <div class="flex flex-col w-1/2">
+            <label class="text-[#0F4C4C] text-sm mb-1" for="firstName">First name</label>
+            <input class="border border-gray-300 rounded-md px-3 py-2" id="firstName" type="text" />
+          </div>
+          <div class="flex flex-col w-1/2">
+            <label class="text-[#0F4C4C] text-sm mb-1" for="lastName">Last name</label>
+            <input class="border border-gray-300 rounded-md px-3 py-2" id="lastName" type="text" />
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <label class="text-[#0F4C4C] text-sm mb-1" for="email">Email</label>
+          <input class="border border-gray-300 rounded-md px-3 py-2" id="email" type="email" />
+        </div>
+        <div class="flex flex-col">
+          <label class="text-[#0F4C4C] text-sm mb-1" for="password">Password</label>
+          <input class="border border-gray-300 rounded-md px-3 py-2" id="password" type="password" />
+        </div>
+        <button class="bg-[#F4A261] text-[#0F4C4C] text-lg rounded-md py-3 w-full" type="submit">Sign me up!</button>
+      </form>
+    </section>
+
+    <!-- Sign In Form -->
+    <section class="w-full max-w-lg">
+      <h2 class="text-xl font-bold mb-4">Already have an account? Sign In</h2>
+      <form id="signinForm" class="space-y-4">
+        <div class="flex flex-col">
+          <label class="text-[#0F4C4C] text-sm mb-1" for="signinEmail">Email</label>
+          <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="signinEmail" type="email" />
+        </div>
+        <div class="flex flex-col">
+          <label class="text-[#0F4C4C] text-sm mb-1" for="signinPassword">Password</label>
+          <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="signinPassword" type="password" />
+        </div>
+        <button class="bg-[#2A9D8F] text-white text-lg rounded-md py-3 w-full" type="submit">Sign In</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Google button
+    document.getElementById('googleSignUpBtn').addEventListener('click', function () {
+      alert('Google Sign Up clicked! This would open the Google sign-up popup.');
+    });
+
+    // Sign Up
+    document.getElementById('signupForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password || !firstName || !lastName) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem('users')) || {};
+
+      if (users[email]) {
+        if (users[email].password === password) {
+          alert('User already signed up. Redirecting to Home...');
+          window.location.href = 'Home.html';
+        } else {
+          alert('Email already exists, but password is incorrect!');
+        }
+      } else {
+        users[email] = { firstName, lastName, email, password };
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Sign-up successful! Redirecting...');
+        window.location.href = 'Home.html';
+      }
+    });
+
+    // Sign In
+    document.getElementById('signinForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('signinEmail').value.trim().toLowerCase();
+      const password = document.getElementById('signinPassword').value;
+
+      let users = JSON.parse(localStorage.getItem('users')) || {};
+
+      if (users[email]) {
+        if (users[email].password === password) {
+          alert(`Welcome back, ${users[email].firstName}! Redirecting to Home...`);
+          window.location.href = 'Home.html';
+        } else {
+          alert('Incorrect password!');
+        }
+      } else {
+        alert('No account found with this email. Please sign up.');
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,70 @@
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <title>Investing - FLA</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fdf6e3;
+        }
+
+        .navbar {
+            background-color: #183152;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #f4a261;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="links">
+            <a href="Home.html">Home</a>
+            <a href="Learninghub.html">Learning Hub</a>
+            <a href="Simulator.html">Simulator</a>
+            <a href="Quizzes.html">Quizzes</a>
+            <a href="Budget.html"> Budget</a>
+        </div>
+    </div>
+    <div class="p-8">
+        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+            <video class="w-full" controls>
+                <source src="Videos/IntroductionVideo.mp4" type="">
+                Your browser does not support the video tag.
+            </video>
+            <div class="p-4">
+                <h2 class="text-2xl font-bold">Investing</h2>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3 class="text-lg font-semibold">Transcript</h3>
+            <div class="bg-[#f4a261] p-4 rounded-lg mt-2">
+                <p class="text-white">wealth. 
+                    </p>
+            </div>
+        </div>
+        <div class="mt-4 flex justify-center">
+            <button class="bg-orange-400 text-white py-2 px-8 rounded-lg" onclick="window.location.href='learninghub.html';">Complete</button>
+        </div>
+    </div>
+</body>
+</html>

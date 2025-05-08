@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+  <title>FLA Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fdf8e3;
+      color: #333;
+      line-height: 1.6;
+    }
+    .navbar {
+      background-color: #183152;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .links {
+      display: flex;
+      gap: 20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .navbar a:hover {
+      color: #f4a261;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 50px;
+      background: #f4a261;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .question {
+      font-weight: bold;
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: #333;
+    }
+    .option {
+      font-size: 20px;
+      font-family: 'Montserrat', sans-serif;
+      list-style: none;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #fdf8e3;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .option:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .correct {
+      background-color: #4CAF50 !important;
+      color: white;
+    }
+    .wrong {
+      background-color: #FF5733 !important;
+      color: white;
+    }
+    .lives {
+      font-size: 18px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    .question-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .hidden {
+      display: none;
+    }
+    .fade-in {
+      opacity: 1 !important;
+    }
+    .fade-out {
+      opacity: 0 !important;
+    }
+    /* Popup Styles */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      text-align: center;
+    }
+    .popup h2 {
+      margin-bottom: 20px;
+    }
+    .popup button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .popup button:hover {
+      background-color: #45a049;
+    }
+
+    /* Score Page Styles */
+    .score-container {
+      display: none;
+      text-align: center;
+      margin: 50px auto;
+      padding: 40px;
+      background-color: #f4a261;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .score-container h1 {
+      font-size: 42px;
+      margin-bottom: 30px;
+      color: #183152;
+    }
+    .progress-bar {
+      width: 80%;
+      margin: 0 auto 25px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden; /* Ensure the progress bar stays within its bounds */
+    }
+    .progress {
+      height: 30px;
+      background-color: #4CAF50;
+      width: 0;
+      border-radius: 10px;
+      transition: width 0.7s ease; /* Slightly smoother transition */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .final-score {
+      font-size: 28px;
+      margin-top: 25px;
+      color: #333;
+    }
+    .accuracy {
+      font-size: 24px;
+      margin-top: 15px;
+      color: #333;
+    }
+    .score-container button {
+      background: #183152;
+      color: #fdf8e3;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background-color 0.3s ease;
+    }
+    .score-container button:hover {
+      background: #fdf8e3;
+      color: #183152;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="links">
+      <a href="Home.html">Home</a>
+      <a href="Learninghub.html">Learning Hub</a>
+      <a href="Simulator.html">Simulator</a>
+      <a href="Quizzes.html">Quizzes</a>
+      <a href="Budget.html">Budget</a>
+    </div>
+  </div>
+
+  <div id="quiz-container" class="quiz-container">
+    <h1 class="question">What is the main goal of finance?</h1>
+    <div class="lives" id="lives">Lives: ❤️❤️❤️</div>
+    <div class="question-container">
+      <ul>
+        <li id="option-a" class="option">a) Tracking expenses only</li>
+        <li id="option-b" class="option">b) Managing money and making smart financial decisions</li>
+        <li id="option-c" class="option">c) Avoiding all types of spending</li>
+        <li id="option-d" class="option">d) Keeping all money in cash</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Popup for Game Over -->
+  <div id="game-over-popup" class="popup">
+    <h2>Oh no, you are out of lives!</h2>
+    <button onclick="startOver()">Start Over</button>
+  </div>
+
+  <!-- Score Page -->
+  <div id="score-container" class="score-container">
+    <h1>Quiz Completed!</h1>
+    <div class="progress-bar">
+      <div id="progress" class="progress"></div>
+    </div>
+    <div class="final-score" id="final-score"></div>
+    <div class="accuracy" id="accuracy"></div>
+    <button onclick="startOver()">Start Over</button>
+  </div>
+
+  <script>
+    let lives = 3;
+    let currentQuestionIndex = 0;
+    let correctAnswersFirstTry = 0;
+    let totalCorrectAnswers = 0; // Track total correct answers
+    let answeredCorrectlyOnCurrentTry = false; // Flag to track if the current question was answered correctly on the first try
+
+    const questions = [
+      {
+        question: "What is the main goal of finance?",
+        options: [
+          "a) Tracking expenses only",
+          "b) Managing money and making smart financial decisions",
+          "c) Avoiding all types of spending",
+          "d) Keeping all money in cash",
+        ],
+        correct: "option-b"
+      },
+      {
+        question: "Which type of finance deals with government budgets and public spending?",
+        options: [
+          "a) Corporate Finance",
+          "b) Personal Finance",
+          "c) Public Finance",
+          "d) Investment Banking",
+        ],
+        correct: "option-c"
+      },
+      {
+        question: "What does a Balance Sheet show?",
+        options: [
+          "a) A list of all expenses made in a month",
+          "b) The financial position of a company, including assets, liabilities, and equity",
+          "c) The total cash a person has in their wallet",
+          "d) Only the profits a business has made",
+        ],
+        correct: "option-b"
+      },
+      {
+        question: "Which of the following is the best example of liquidity?",
+        options: [
+          "a) A savings account where money can be withdrawn anytime",
+          "b) A house that takes months to sell",
+          "c) A rare painting that is valuable but hard to sell quickly",
+          "d) A company’s long-term investment in real estate",
+        ],
+        correct: "option-a"
+      },
+      {
+        question: "What is compound interest?",
+        options: [
+          "a) Interest earned only on the initial amount invested",
+          "b) A fee paid to banks for keeping money in savings",
+          "c) A type of tax charged on bank accounts",
+          "d) Interest calculated on both the initial amount and the interest already earned",
+        ],
+        correct: "option-d"
+      }
+    ];
+
+    function resetColors() {
+      document.querySelectorAll(".option").forEach(option => {
+        option.classList.remove("correct", "wrong");
+      });
+    }
+
+    function updateLives() {
+      document.getElementById("lives").textContent = "Lives: " + "❤️".repeat(lives);
+    }
+
+    function handleClick(event) {
+      resetColors();
+      const clickedOption = event.target;
+
+      if (clickedOption.id === questions[currentQuestionIndex].correct) {
+        clickedOption.classList.add("correct");
+        totalCorrectAnswers++; // Increment total correct answers
+
+        if (!answeredCorrectlyOnCurrentTry) {
+            correctAnswersFirstTry++;
+        }
+
+        setTimeout(() => {
+          loadNextQuestion();
+        }, 1500);
+      } else {
+        clickedOption.classList.add("wrong");
+        lives--;
+        updateLives();
+        answeredCorrectlyOnCurrentTry = true; // Set the flag to true after the first wrong answer
+
+        if (lives === 0) {
+          showGameOver();
+        } else {
+          setTimeout(() => {
+            alert("Try again!");
+            resetColors();
+          }, 1000);
+        }
+      }
+    }
+
+    function loadNextQuestion() {
+      currentQuestionIndex++;
+      answeredCorrectlyOnCurrentTry = false; // Reset the flag for the next question
+
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showFinalScore();
+      }
+    }
+
+    function loadQuestion() {
+      const currentQuestion = questions[currentQuestionIndex];
+      const quizContainer = document.getElementById("quiz-container");
+
+      quizContainer.classList.add("fade-out");
+      setTimeout(() => {
+        quizContainer.classList.remove("fade-out");
+        quizContainer.classList.add("fade-in");
+
+        quizContainer.querySelector(".question").textContent = currentQuestion.question;
+        const optionsList = quizContainer.querySelector("ul");
+        optionsList.innerHTML = "";
+        currentQuestion.options.forEach((option, index) => {
+          const li = document.createElement("li");
+          li.textContent = option;
+          li.classList.add("option");
+          li.id = `option-${String.fromCharCode(97 + index)}`;
+          li.addEventListener("click", handleClick);
+          optionsList.appendChild(li);
+        });
+      }, 500);
+
+      quizContainer.style.opacity = 0;
+      setTimeout(() => {
+        quizContainer.style.opacity = 1;
+      }, 10);
+    }
+
+    function showGameOver() {
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("game-over-popup").style.display = "block";
+    }
+
+    function startOver() {
+      lives = 3;
+      currentQuestionIndex = 0;
+      correctAnswersFirstTry = 0;
+      totalCorrectAnswers = 0; // Reset total correct answers
+      answeredCorrectlyOnCurrentTry = false; // Reset the flag
+      updateLives();
+      document.getElementById("game-over-popup").style.display = "none";
+      document.getElementById("score-container").style.display = "none";
+      document.getElementById("quiz-container").style.display = "block";
+      loadQuestion();
+    }
+
+    function showFinalScore() {
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("game-over-popup").style.display = "none";
+      document.getElementById("score-container").style.display = "block";
+
+      const progress = document.getElementById("progress");
+      const score = correctAnswersFirstTry;
+      const totalQuestions = questions.length;
+      const percentage = (score / totalQuestions) * 100;
+      const overallAccuracy = (totalCorrectAnswers / questions.length) * 100; // Calculate overall accuracy
+
+      progress.style.width = `${percentage}%`;
+      progress.textContent = `${percentage.toFixed(0)}%`; // Show percentage inside the progress bar
+      document.getElementById("final-score").textContent = `You got ${score} out of ${totalQuestions} correct on your first try!`;
+      document.getElementById("accuracy").textContent = `Overall Accuracy: ${overallAccuracy.toFixed(0)}%`; // Display overall accuracy
+    }
+
+    loadQuestion();
+
+
+    // Function to save quiz data to local storage
+function saveQuizData() {
+    // Get all the quiz answers
+    const answers = {
+        q1: document.querySelector('input[name="q1"]:checked')?.value,
+        q2: document.querySelector('input[name="q2"]:checked')?.value,
+        q3: document.querySelector('input[name="q3"]:checked')?.value,
+    };
+
+    // Save the answers in localStorage
+    localStorage.setItem('quizAnswers', JSON.stringify(answers));
+}
+
+// Call this function when the form is submitted or when you want to save the data
+document.getElementById('quiz-form').onsubmit = function (event) {
+    event.preventDefault();
+    saveQuizData();  // Save the answers to localStorage
+};
+
+// Retrieve saved answers from localStorage and display them
+const savedAnswers = JSON.parse(localStorage.getItem('quizAnswers'));
+if (savedAnswers) {
+    console.log(savedAnswers);  // Or display them in the page wherever you need
+}
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

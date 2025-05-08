@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Budget Planner</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fdf8e3;
+      color: #333;
+      line-height: 1.6;
+    }
+    .budget-planner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .navbar {
+      background-color: #183152;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .links {
+      display: flex;
+      gap: 20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .navbar a:hover { color: #f4a261; }
+    .section {
+      background-color: #f4a261;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      flex: 1 1 300px;
+      max-width: 400px;
+    }
+    h2 { font-size: 22px; margin-bottom: 10px; color: #333; }
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #183152;
+      color: #fdf8e3;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background: #fdf8e3;
+      color: #183152;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+    .chart-container, .bar-container {
+      width: 100%;
+      height: 300px;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="links">
+      <a href="Home.html">Home</a>
+      <a href="Learninghub.html">Learning Hub</a>
+      <a href="Simulator.html">Simulator</a>
+      <a href="Quizzes.html">Quizzes</a>
+      <a href="Budget.html">Budget</a>
+    </div>
+  </div>
+
+  <div class="budget-planner">
+    <div class="section">
+      <h2>Add Income</h2>
+      <input type="number" id="incomeInput" placeholder="Enter amount (INR)">
+      <button onclick="addIncome()">Add Income</button>
+      <p>Total Income: ₹<span id="totalIncome">0</span></p>
+    </div>
+
+    <div class="section">
+      <h2>Add Expense</h2>
+      <input type="number" id="expenseInput" placeholder="Enter amount (INR)">
+      <select id="expenseCategory">
+        <option value="Food">Food</option>
+        <option value="Fun">Fun</option>
+        <option value="School">School</option>
+        <option value="Other">Other</option>
+      </select>
+      <button onclick="addExpense()">Add Expense</button>
+      <p class="error" id="errorMsg"></p>
+      <ul id="expenseList"></ul>
+      <p>Total Expenses: ₹<span id="totalExpenses">0</span></p>
+      <p>Savings: ₹<span id="savings">0</span></p>
+    </div>
+
+    <div class="section">
+      <h2>Spending Chart</h2>
+      <div class="chart-container">
+        <canvas id="spendingChart"></canvas>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Monthly Comparison</h2>
+      <select id="monthSelector" onchange="resetMonthData()">
+        <option value="January">January</option>
+        <option value="February">February</option>
+        <option value="March">March</option>
+        <option value="April">April</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="October">October</option>
+        <option value="November">November</option>
+        <option value="December">December</option>
+      </select>
+      <button onclick="saveMonthData()">Save Current Month</button>
+      <div class="bar-container">
+        <canvas id="monthChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+<script>
+  let income = 0;
+  let expenses = 0;
+  let expenseBreakdown = { Food: 0, Fun: 0, School: 0, Other: 0 };
+  let monthlyData = {};
+
+  const saved = JSON.parse(localStorage.getItem("budgetData"));
+  if (saved) {
+    income = saved.income || 0;
+    expenses = saved.expenses || 0;
+    expenseBreakdown = saved.expenseBreakdown || { Food: 0, Fun: 0, School: 0, Other: 0 };
+    monthlyData = saved.monthlyData || {};
+    if (saved.expenseHTML) document.getElementById("expenseList").innerHTML = saved.expenseHTML;
+  }
+
+  function saveToLocal() {
+    localStorage.setItem("budgetData", JSON.stringify({
+      income,
+      expenses,
+      expenseBreakdown,
+      monthlyData,
+      expenseHTML: document.getElementById("expenseList").innerHTML
+    }));
+  }
+
+  function updateUI() {
+    const savings = income - expenses;
+    document.getElementById('totalIncome').textContent = income;
+    document.getElementById('totalExpenses').textContent = expenses;
+    document.getElementById('savings').textContent = savings;
+    document.getElementById('errorMsg').textContent = '';
+    updateChart();
+    updateMonthChart();
+    saveToLocal();
+  }
+
+  function addIncome() {
+    const amount = parseFloat(document.getElementById('incomeInput').value);
+    if (!isNaN(amount) && amount !== 0) {
+      if (amount < 0) {
+        const absAmount = Math.abs(amount);
+        if (income - absAmount < expenses) {
+          document.getElementById('errorMsg').textContent = 'Error: Cannot subtract this amount. Expenses would exceed income!';
+          return;
+        }
+        income -= absAmount;
+      } else {
+        income += amount;
+      }
+      updateUI();
+    }
+  }
+
+  function addExpense() {
+    const amount = parseFloat(document.getElementById('expenseInput').value);
+    const category = document.getElementById('expenseCategory').value;
+    if (!isNaN(amount) && amount > 0 && category) {
+      const projectedExpenses = expenses + amount;
+      const projectedSavings = income - projectedExpenses;
+
+      if (projectedSavings < 0) {
+        document.getElementById('errorMsg').textContent = 'Error: Expenses cannot exceed total income!';
+        return;
+      }
+
+      expenses += amount;
+      expenseBreakdown[category] += amount;
+      document.getElementById('expenseList').innerHTML += `<li>${category}: ₹${amount}</li>`;
+      updateUI();
+    }
+  }
+
+  const pieCtx = document.getElementById('spendingChart').getContext('2d');
+  const spendingChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(expenseBreakdown),
+      datasets: [{
+        label: 'Spending',
+        data: Object.values(expenseBreakdown),
+        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  function updateChart() {
+    spendingChart.data.datasets[0].data = Object.values(expenseBreakdown);
+    spendingChart.update();
+  }
+
+  const barCtx = document.getElementById('monthChart').getContext('2d');
+  const monthChart = new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [
+        { label: 'Income', backgroundColor: '#43aa8b', data: [] },
+        { label: 'Expenses', backgroundColor: '#f3722c', data: [] },
+        { label: 'Savings', backgroundColor: '#577590', data: [] }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  function saveMonthData() {
+    const month = document.getElementById('monthSelector').value;
+    monthlyData[month] = {
+      income: income,
+      expenses: expenses,
+      savings: income - expenses
+    };
+    updateUI();
+  }
+
+  function updateMonthChart() {
+    const months = Object.keys(monthlyData);
+    const incomes = months.map(m => monthlyData[m].income);
+    const spends = months.map(m => monthlyData[m].expenses);
+    const savings = months.map(m => monthlyData[m].savings);
+
+    monthChart.data.labels = months;
+    monthChart.data.datasets[0].data = incomes;
+    monthChart.data.datasets[1].data = spends;
+    monthChart.data.datasets[2].data = savings;
+    monthChart.update();
+  }
+
+  function resetMonthData() {
+    income = 0;
+    expenses = 0;
+    expenseBreakdown = { Food: 0, Fun: 0, School: 0, Other: 0 };
+    document.getElementById('expenseList').innerHTML = '';
+    updateUI();
+  }
+
+  updateUI(); // Load data when page opens
+</script>
+</body>
+</html>

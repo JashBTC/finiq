@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+  <title>FLA Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fdf8e3;
+      color: #333;
+      line-height: 1.6;
+    }
+    .navbar {
+      background-color: #183152;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .links {
+      display: flex;
+      gap: 20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .navbar a:hover {
+      color: #f4a261;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 50px;
+      background: #f4a261;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .question {
+      font-weight: bold;
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: #333;
+    }
+    .option {
+      font-size: 20px;
+      font-family: 'Montserrat', sans-serif;
+      list-style: none;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #fdf8e3;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .option:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .correct {
+      background-color: #4CAF50 !important;
+      color: white;
+    }
+    .wrong {
+      background-color: #FF5733 !important;
+      color: white;
+    }
+    .lives, .timer {
+      font-size: 18px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    .question-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .hidden {
+      display: none;
+    }
+    .fade-in {
+      opacity: 1 !important;
+    }
+    .fade-out {
+      opacity: 0 !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="links">
+      <a href="Home.html">Home</a>
+      <a href="Learninghub.html">Learning Hub</a>
+      <a href="Simulator.html">Simulator</a>
+      <a href="Quizzes.html">Quizzes</a>
+      <a href="Budget.html">Budget</a>
+    </div>
+  </div>
+
+  <div id="quiz-container" class="quiz-container">
+    <h1 class="question">What is the main goal of investing?</h1>
+    <div class="timer" id="timer">Time Left: 20s</div>
+    <div class="lives" id="lives">Lives: ❤️❤️❤️</div>
+    <div class="question-container">
+      <ul>
+        <li id="option-a" class="option">A) To make quick money overnight</li>
+        <li id="option-b" class="option">B) To grow wealth over time by earning returns</li>
+        <li id="option-c" class="option">C) To keep all money in a savings account</li>
+        <li id="option-d" class="option">D) To avoid all financial risks</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let lives = 3;
+    let timeLeft = 20;
+    let currentQuestionIndex = 0;
+    let timerInterval;
+
+    const questions = [
+      {
+        question: "What is the main goal of investing?",
+        options: [
+          "A) To make quick money overnight",
+          "B) To grow wealth over time by earning returns",
+          "C) To keep all money in a savings account",
+          "D) To avoid all financial risks"
+        ],
+        correct: "option-b"
+      },
+      {
+        question: "Which of the following is considered a high-risk, high-reward investment?",
+        options: [
+          "A) Bonds",
+          "B) Savings accounts",
+          "C) Stocks",
+          "D) Fixed deposits"
+        ],
+        correct: "option-c"
+      },
+      {
+        question: "How can teenagers start learning about investing?",
+        options: [
+          "A) By using stock market simulators",
+          "B) By investing all their pocket money blindly",
+          "C) By avoiding any financial knowledge until adulthood",
+          "D) By keeping cash under their mattress"
+        ],
+        correct: "option-a"
+      },
+      {
+        question: "What is the key difference between investing and gambling?",
+        options: [
+          "A) Investing is based on luck, while gambling is based on strategy",
+          "B) Gambling is long-term, while investing is short-term",
+          "C) Investing involves research and strategy, while gambling relies on chance",
+          "D) Gambling is regulated, while investing is not"
+        ],
+        correct: "option-c"
+      },
+      {
+        question: "Why do funds (like mutual funds and ETFs) help reduce risk?",
+        options: [
+          "A) They guarantee profits with no risk involved",
+          "B) They spread investments across multiple assets, reducing dependence on one",
+          "C) They only invest in stocks that never lose value",
+          "D) They eliminate the need to understand finance"
+        ],
+        correct: "option-b"
+      }
+    ];
+
+    function resetColors() {
+      document.querySelectorAll(".option").forEach(option => {
+        option.classList.remove("correct", "wrong");
+      });
+    }
+
+    function updateLives() {
+      document.getElementById("lives").textContent = "Lives: " + "❤️".repeat(lives);
+    }
+
+    function handleClick(event) {
+      clearInterval(timerInterval);
+      resetColors();
+      const clickedOption = event.target;
+
+      if (clickedOption.id === questions[currentQuestionIndex].correct) {
+        clickedOption.classList.add("correct");
+        setTimeout(() => {
+          loadNextQuestion();
+        }, 1500); // Transition after 1.5 seconds
+      } else {
+        clickedOption.classList.add("wrong");
+        lives--;
+        updateLives();
+        if (lives === 0) {
+          setTimeout(() => alert("Game Over!"), 500);
+        } else {
+          setTimeout(() => {
+            alert("Try again!");
+            resetColors();
+            timeLeft = 20;
+            startTimer();
+          }, 1000);
+        }
+      }
+    }
+
+    function startTimer() {
+      const timerDisplay = document.getElementById("timer");
+      timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          lives--;
+          updateLives();
+          if (lives === 0) {
+            alert("Time's up! Game Over!");
+          } else {
+            alert("Time's up! Try again.");
+            resetColors();
+            timeLeft = 20;
+            startTimer();
+          }
+        }
+      }, 1000);
+    }
+
+    function loadNextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+      } else {
+        alert("You've completed the quiz!");
+      }
+    }
+
+    function loadQuestion() {
+      const currentQuestion = questions[currentQuestionIndex];
+      const quizContainer = document.getElementById("quiz-container");
+
+      // Fade out the current question
+      quizContainer.classList.add("fade-out");
+      setTimeout(() => {
+        quizContainer.classList.remove("fade-out");
+        quizContainer.classList.add("fade-in");
+
+        // Update question text and options
+        quizContainer.querySelector(".question").textContent = currentQuestion.question;
+        const optionsList = quizContainer.querySelector("ul");
+        optionsList.innerHTML = "";
+        currentQuestion.options.forEach((option, index) => {
+          const li = document.createElement("li");
+          li.textContent = option;
+          li.classList.add("option");
+          li.id = `option-${String.fromCharCode(97 + index)}`;
+          li.addEventListener("click", handleClick);
+          optionsList.appendChild(li);
+        });
+      }, 500); // Wait for 0.5 seconds before fading in
+    }
+
+    // Initialize the quiz
+    loadQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

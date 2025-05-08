@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <title>Home Page - FLA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fdf8e3;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #183152;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: #f4a261;
+    }
+
+    .account-icon {
+      color: #fff;
+      font-size: 24px;
+      transition: color 0.3s ease;
+    }
+
+    .account-icon:hover {
+      color: #f4a261;
+    }
+
+    .welcome-container {
+      background: #f4a261;
+      padding: 40px;
+      text-align: center;
+      margin: 50px auto;
+      max-width: 900px;
+      border-radius: 12px;
+    }
+
+    .welcome-container h1 {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .welcome-container p {
+      font-size: 20px;
+    }
+
+    .progress-bar {
+      margin: 20px auto;
+      width: 85%;
+      height: 15px;
+      background: #ddd;
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      width: 42%;
+      height: 100%;
+      background: #4CAF50;
+      border-radius: 5px;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      margin-bottom: 60px;
+      align-items: center;
+    }
+
+    .feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .feature img {
+      width: 150px;
+      height: 150px;
+      padding: 25px;
+      background-color: #F4A261;
+      border-radius: 15px;
+      box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature p {
+      font-weight: bold;
+      font-size: 22px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="links">
+      <a href="Home.html">Home</a>
+      <a href="Learninghub.html">Learning Hub</a>
+      <a href="Simulator.html">Simulator</a>
+      <a href="Quizzes.html">Quizzes</a>
+      <a href="Budget.html">Budget</a>
+    </div>
+    <!-- My Account Icon -->
+    <a href="Account.html" title="My Account">
+      <i class="fas fa-user-circle account-icon"></i>
+    </a>
+  </div>
+
+  <div class="welcome-container">
+    <h1>Welcome back, User!</h1>
+    <p>Let's grow your financial knowledge today!</p>
+    <div class="progress-bar">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <p>3 out of 7 modules completed</p>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <img src="Images/QuizIcon.png" alt="Quiz">
+      <p>Daily Quiz</p>
+    </div>
+    <div class="feature">
+      <img src="Images/MockPortfolio.png" alt="Mock Portfolio">
+      <p>Mock Portfolio</p>
+    </div>
+    <div class="feature">
+      <img src="Images/BudgetPlannerIcon.png" alt="Budget Planner" onclick="window.location.href='Budget.html';">
+      <p>Budget Planner</p>
+    </div>
+  </div>
+
+</body>
+</html>
+

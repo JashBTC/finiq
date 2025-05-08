@@ -1,0 +1,81 @@
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <title>Introduction - FLA</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fdf6e3;
+        }
+
+        .navbar {
+            background-color: #183152;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #f4a261;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="links">
+            <a href="Home.html">Home</a>
+            <a href="Learninghub.html">Learning Hub</a>
+            <a href="Simulator.html">Simulator</a>
+            <a href="Quizzes.html">Quizzes</a>
+            <a href="Budget.html"> Budget</a>
+        </div>
+    </div>
+    <div class="p-8">
+        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+            <video class="w-full" controls>
+                <source src="Videos/IntroductionVideo.mp4" type="">
+                Your browser does not support the video tag.
+            </video>
+            <div class="p-4">
+                <h2 class="text-2xl font-bold">Introduction to Finance</h2>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3 class="text-lg font-semibold">Transcript</h3>
+            <div class="bg-[#f4a261] p-4 rounded-lg mt-2">
+                <p class="text-white">Finance is all about managing money and making decisions about how to save, spend, or invest it. It helps us plan for the future, grow wealth, and handle expenses. It also involves concepts like interest (money earned or paid over time) and the value of money today versus tomorrow.
+                    There are three main types of finance:
+                    Public Finance: This is about how governments manage money. It includes things like taxes, budgets, and funding public services like schools and roads.
+                    Corporate Finance: This focuses on businesses and how they handle their money, like profits, debts, and investments.
+                    Personal Finance: This is about your money—budgeting, saving for goals, planning for big purchases, and making smart choices about spending.
+                    Here are some key finance terms that you need to know about:
+                    Asset: Anything of value that is owned by an individual or business, such as property, cash, investments, or equipment. Assets can generate income or be used to pay off liabilities.
+                    Balance Sheet: A financial statement that summarizes a company's assets, liabilities, and equity at a specific point in time. It provides a snapshot of the company's financial position.
+                    Cash Flow: The movement of money into and out of a business or account. Positive cash flow indicates more money is coming in than going out, while negative cash flow is the opposite.
+                    Compound Interest: Interest calculated on the initial principal and also on the accumulated interest from previous periods. It allows investments to grow faster than simple interest.
+                    Equity: The ownership interest in an asset after deducting liabilities. For example, in a company, equity represents the shareholders' claim on the business assets.
+                    Liabilities: Financial obligations or debts that a business or individual owes to others, such as loans, credit card balances, or unpaid bills.
+                    Liquidity: The ability to quickly convert an asset into cash without significantly affecting its value. High liquidity means faster and easier access to cash.</p>
+            </div>
+        </div>
+        <div class="mt-4 flex justify-center">
+            <button class="bg-orange-400 text-white py-2 px-8 rounded-lg" onclick="window.location.href='learninghub.html';">Complete</button>
+        </div>
+    </div>
+</body>
+</html>
