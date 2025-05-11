@@ -111,13 +111,28 @@
 
   </main>
 
-  <!-- Scripts -->
-  <script>
-    // Google button
-    document.getElementById('googleSignUpBtn').addEventListener('click', function () {
-      alert('Google Sign Up clicked! This would open the Google sign-up popup.');
-    });
+  <!-- Supabase Auth Script -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
+    const supabase = createClient('https://oiblyjfrfkmrzyrzfkcj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pYmx5amZyZmttcnp5cnpma2NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5NTMzNjUsImV4cCI6MjA2MjUyOTM2NX0.zrSMgqk8gLhTMiKt2UlZSVPt92_-wUeW9van-Q7kDiw'); // 🔁 Replace these
+
+    document.getElementById('googleSignUpBtn').addEventListener('click', async function () {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/Home.html'
+        }
+      });
+
+      if (error) {
+        alert('Google sign-in failed: ' + error.message);
+      }
+    });
+  </script>
+
+  <!-- Local Storage Auth Script (optional) -->
+  <script>
     // Sign Up
     document.getElementById('signupForm').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -170,8 +185,11 @@
       }
     });
   </script>
+
 </body>
 </html>
+
+
 
 
 
